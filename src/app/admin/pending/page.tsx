@@ -359,7 +359,7 @@ export default function AdminPending() {
                 className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.slug}>{cat.icon} {cat.name}</option>
+                  <option key={cat.id} value={cat.slug}>{(cat as any).icon} {cat.name}</option>
                 ))}
               </select>
             </div>

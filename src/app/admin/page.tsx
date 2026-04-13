@@ -116,7 +116,7 @@ export default function AdminDashboard() {
                 .map((cat) => (
                   <div key={cat.id} className="flex items-center gap-4">
                     <span className="w-24 flex items-center gap-1.5 text-sm">
-                      <span>{cat.icon}</span>
+                      <span>{(cat as any).icon}</span>
                       <span className="font-medium truncate">{cat.name}</span>
                     </span>
                     <div className="flex-1 h-8 bg-secondary rounded-lg overflow-hidden">

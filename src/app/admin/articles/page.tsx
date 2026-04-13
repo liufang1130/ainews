@@ -169,7 +169,7 @@ export default function AdminArticles() {
                           className="text-xs"
                           style={{ color: article.category.color || undefined, borderColor: article.category.color || undefined }}
                         >
-                          {article.category.icon} {article.category.name}
+                          {(article.category as any).icon} {article.category.name}
                         </Badge>
                       )}
                       {parseTags(article.tags).map((tag) => (

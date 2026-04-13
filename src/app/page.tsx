@@ -192,7 +192,7 @@ export default function HomePage() {
                 }}
                 onClick={() => setSelectedCategory(cat.slug)}
               >
-                {cat.icon} {cat.name} ({cat._count.articles})
+                {(cat as any).icon} {cat.name} ({cat._count.articles})
               </Badge>
             ))}
           </nav>
@@ -262,7 +262,7 @@ export default function HomePage() {
                               color: article.category.color || undefined,
                             }}
                           >
-                            {article.category.icon} {article.category.name}
+                            {(article.category as any).icon} {article.category.name}
                           </Badge>
                         )}
 
