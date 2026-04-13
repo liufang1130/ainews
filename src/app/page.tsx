@@ -188,7 +188,7 @@ export default function HomePage() {
                     : ''
                 }`}
                 style={{
-                  backgroundColor: selectedCategory === cat.slug ? cat.color : undefined,
+                  backgroundColor: selectedCategory === cat.slug ? (cat.color || undefined) : undefined,
                 }}
                 onClick={() => setSelectedCategory(cat.slug)}
               >

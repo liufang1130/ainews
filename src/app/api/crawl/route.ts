@@ -8,15 +8,14 @@ export async function POST(request: Request) {
     const { sourceId } = body;
 
     if (sourceId) {
-      // Crawl a single source
       const source = await db.source.findUnique({ where: { id: sourceId } });
       if (!source) {
         return NextResponse.json({ error: '信息源不存在' }, { status: 404 });
       }
 
-      return await executeCrawl(source);
+      const result = await executeCrawl(source);
+      return NextResponse.json(result);
     } else {
-      // Crawl all enabled sources
       const sources = await db.source.findMany({
         where: { isEnabled: true },
         orderBy: { priority: 'desc' },
@@ -26,7 +25,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: '没有可用的信息源' }, { status: 400 });
       }
 
-      const results = [];
+      const results: any[] = [];
       for (const source of sources) {
         const result = await executeCrawl(source);
         results.push(result);
@@ -48,8 +47,7 @@ export async function POST(request: Request) {
   }
 }
 
-async function executeCrawl(source: any) {
-  // Create crawl log
+async function executeCrawl(source: any): Promise<any> {
   const log = await db.crawlLog.create({
     data: {
       sourceId: source.id,
@@ -68,24 +66,19 @@ async function executeCrawl(source: any) {
     if (error) {
       await db.crawlLog.update({
         where: { id: log.id },
-        data: {
-          status: 'error',
-          errorMessage: error,
-          finishedAt: new Date(),
-        },
+        data: { status: 'error', errorMessage: error, finishedAt: new Date() },
       });
       await db.source.update({
         where: { id: source.id },
         data: { status: 'error', lastCrawledAt: new Date() },
       });
-      return NextResponse.json({ sourceName: source.name, foundCount: 0, newCount: 0, error });
+      return { sourceName: source.name, foundCount: 0, newCount: 0, error };
     }
 
     let newCount = 0;
     for (const item of results) {
       const fingerprint = generateFingerprint(item.title, item.url);
 
-      // Check if already exists
       const existing = await db.rawArticle.findFirst({
         where: { fingerprint },
       });
@@ -109,7 +102,6 @@ async function executeCrawl(source: any) {
       }
     }
 
-    // Update log and source status
     await db.crawlLog.update({
       where: { id: log.id },
       data: {
@@ -125,11 +117,7 @@ async function executeCrawl(source: any) {
       data: { status: 'active', lastCrawledAt: new Date() },
     });
 
-    return NextResponse.json({
-      sourceName: source.name,
-      foundCount: results.length,
-      newCount,
-    });
+    return { sourceName: source.name, foundCount: results.length, newCount };
   } catch (err) {
     await db.crawlLog.update({
       where: { id: log.id },

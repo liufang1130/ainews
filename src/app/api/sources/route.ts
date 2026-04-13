@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     }
 
     // Check for duplicate URL
-    const existing = await db.source.findUnique({ where: { url } });
+    const existing = await db.source.findFirst({ where: { url } });
     if (existing) {
       return NextResponse.json({ error: '该URL已存在' }, { status: 409 });
     }
