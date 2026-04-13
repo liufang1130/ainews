@@ -258,8 +258,8 @@ export default function HomePage() {
                             variant="outline"
                             className="text-xs"
                             style={{
-                              borderColor: article.category.color,
-                              color: article.category.color,
+                              borderColor: article.category.color || undefined,
+                              color: article.category.color || undefined,
                             }}
                           >
                             {article.category.icon} {article.category.name}

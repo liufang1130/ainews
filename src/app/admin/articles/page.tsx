@@ -167,7 +167,7 @@ export default function AdminArticles() {
                         <Badge
                           variant="outline"
                           className="text-xs"
-                          style={{ color: article.category.color, borderColor: article.category.color }}
+                          style={{ color: article.category.color || undefined, borderColor: article.category.color || undefined }}
                         >
                           {article.category.icon} {article.category.name}
                         </Badge>
