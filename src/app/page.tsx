@@ -99,10 +99,23 @@ export default function HomePage() {
       if (searchQuery) params.set('search', searchQuery);
       params.set('limit', '50');
 
-      const res = await fetch(`/api/articles?${params}`);
-      const data = await res.json();
-      setArticles(data.articles || []);
-      if (data.categories) setCategories(data.categories);
+      // 并行获取文章和分类
+      const [articlesRes, statsRes] = await Promise.all([
+        fetch(`/api/articles?${params}`),
+        fetch('/api/stats'),
+      ]);
+      const articlesData = await articlesRes.json();
+      const statsData = await statsRes.json();
+
+      // 兼容数组和对象两种返回格式
+      if (Array.isArray(articlesData)) {
+        setArticles(articlesData);
+      } else {
+        setArticles(articlesData.articles || []);
+        if (articlesData.categories) setCategories(articlesData.categories);
+      }
+      // 从 stats 获取分类信息（含文章计数）
+      if (statsData.categoryCount) setCategories(statsData.categoryCount);
     } catch (error) {
       console.error('Failed to fetch articles:', error);
     } finally {
