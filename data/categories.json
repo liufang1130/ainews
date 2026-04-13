@@ -1,0 +1,66 @@
+[
+  {
+    "id": "cat1",
+    "name": "大模型",
+    "slug": "llm",
+    "icon": "🤖",
+    "color": "#6366f1",
+    "sortOrder": 1
+  },
+  {
+    "id": "cat2",
+    "name": "开源项目",
+    "slug": "opensource",
+    "icon": "📦",
+    "color": "#10b981",
+    "sortOrder": 2
+  },
+  {
+    "id": "cat3",
+    "name": "融资动态",
+    "slug": "funding",
+    "icon": "💰",
+    "color": "#f59e0b",
+    "sortOrder": 3
+  },
+  {
+    "id": "cat4",
+    "name": "AI工具",
+    "slug": "tools",
+    "icon": "🛠️",
+    "color": "#8b5cf6",
+    "sortOrder": 4
+  },
+  {
+    "id": "cat5",
+    "name": "学术研究",
+    "slug": "research",
+    "icon": "🔬",
+    "color": "#ec4899",
+    "sortOrder": 5
+  },
+  {
+    "id": "cat6",
+    "name": "公司动态",
+    "slug": "company",
+    "icon": "🏢",
+    "color": "#06b6d4",
+    "sortOrder": 6
+  },
+  {
+    "id": "cat7",
+    "name": "教程指南",
+    "slug": "tutorial",
+    "icon": "📚",
+    "color": "#f97316",
+    "sortOrder": 7
+  },
+  {
+    "id": "cat8",
+    "name": "政策法规",
+    "slug": "policy",
+    "icon": "⚖️",
+    "color": "#78716c",
+    "sortOrder": 8
+  }
+]

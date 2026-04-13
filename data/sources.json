@@ -1,0 +1,38 @@
+[
+  {
+    "id": "src1",
+    "name": "36氪 AI频道",
+    "url": "https://36kr.com/information/AI/",
+    "type": "website",
+    "description": "36氪 AI 频道资讯",
+    "isEnabled": true,
+    "priority": 10,
+    "status": "active",
+    "createdAt": "2026-04-13T12:13:31.540Z",
+    "updatedAt": "2026-04-13T12:13:31.541Z"
+  },
+  {
+    "id": "src2",
+    "name": "量子位",
+    "url": "https://www.qbitai.com/",
+    "type": "website",
+    "description": "关注 AI 和前沿科技",
+    "isEnabled": true,
+    "priority": 8,
+    "status": "active",
+    "createdAt": "2026-04-13T12:13:31.541Z",
+    "updatedAt": "2026-04-13T12:13:31.541Z"
+  },
+  {
+    "id": "src3",
+    "name": "机器之心",
+    "url": "https://www.jiqizhixin.com/",
+    "type": "website",
+    "description": "专业 AI 技术媒体",
+    "isEnabled": true,
+    "priority": 7,
+    "status": "active",
+    "createdAt": "2026-04-13T12:13:31.541Z",
+    "updatedAt": "2026-04-13T12:13:31.541Z"
+  }
+]

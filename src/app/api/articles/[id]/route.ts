@@ -1,24 +1,16 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { getArticle, updateArticle, deleteArticle } from '@/lib/data';
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const article = await db.article.findUnique({
-      where: { id },
-      include: {
-        category: true,
-        rawArticle: { include: { source: true } },
-      },
-    });
-
+    const article = getArticle(id);
     if (!article) {
       return NextResponse.json({ error: '文章不存在' }, { status: 404 });
     }
-
     return NextResponse.json(article);
   } catch (error) {
     return NextResponse.json({ error: '获取文章失败' }, { status: 500 });
@@ -32,47 +24,40 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-
-    // Convert tags array to JSON string if needed
-    if (body.tags && Array.isArray(body.tags)) {
-      body.tags = JSON.stringify(body.tags);
+    
+    // 处理 isPinned 切换
+    if (body.isPinned !== undefined && Object.keys(body).length === 1) {
+      const article = getArticle(id);
+      if (!article) {
+        return NextResponse.json({ error: '文章不存在' }, { status: 404 });
+      }
+      const updated = updateArticle(id, { isPinned: body.isPinned });
+      return NextResponse.json(updated);
     }
 
-    const { rawArticle: _, ...updateData } = body;
+    const updated = updateArticle(id, body);
+    if (!updated) {
+      return NextResponse.json({ error: '文章不存在' }, { status: 404 });
+    }
 
-    const article = await db.article.update({
-      where: { id },
-      data: updateData,
-    });
-
-    return NextResponse.json(article);
+    return NextResponse.json(updated);
   } catch (error) {
-    console.error('Update article error:', error);
-    return NextResponse.json({ error: '更新文章失败' }, { status: 500 });
+    return NextResponse.json({ error: '更新失败' }, { status: 500 });
   }
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const article = await db.article.findUnique({ where: { id } });
-
-    if (article) {
-      // Reset raw article status
-      await db.rawArticle.update({
-        where: { id: article.rawArticleId },
-        data: { status: 'pending' },
-      });
+    const success = deleteArticle(id);
+    if (!success) {
+      return NextResponse.json({ error: '文章不存在' }, { status: 404 });
     }
-
-    await db.article.delete({ where: { id } });
-
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ message: '删除成功' });
   } catch (error) {
-    console.error('Delete article error:', error);
-    return NextResponse.json({ error: '删除文章失败' }, { status: 500 });
+    return NextResponse.json({ error: '删除失败' }, { status: 500 });
   }
 }
