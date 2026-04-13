@@ -78,7 +78,7 @@ async function executeCrawl(source: any) {
         where: { id: source.id },
         data: { status: 'error', lastCrawledAt: new Date() },
       });
-      return { sourceName: source.name, foundCount: 0, newCount: 0, error };
+      return NextResponse.json({ sourceName: source.name, foundCount: 0, newCount: 0, error });
     }
 
     let newCount = 0;
@@ -125,11 +125,11 @@ async function executeCrawl(source: any) {
       data: { status: 'active', lastCrawledAt: new Date() },
     });
 
-    return {
+    return NextResponse.json({
       sourceName: source.name,
       foundCount: results.length,
       newCount,
-    };
+    });
   } catch (err) {
     await db.crawlLog.update({
       where: { id: log.id },
