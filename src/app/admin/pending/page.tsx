@@ -55,9 +55,16 @@ export default function AdminPending() {
     try {
       const res = await fetch(`/api/pending?page=${page}&limit=20`);
       const data = await res.json();
-      setArticles(data.articles || []);
-      if (data.pagination) {
-        setTotalPages(data.pagination.pages);
+      // 兼容数组和对象两种返回格式
+      if (Array.isArray(data)) {
+        setArticles(data);
+        // 简单前端分页
+        setTotalPages(1);
+      } else {
+        setArticles(data.articles || []);
+        if (data.pagination) {
+          setTotalPages(data.pagination.pages);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch pending articles:', error);
@@ -104,6 +111,7 @@ export default function AdminPending() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          action: 'approve',
           categoryId: categories.find((c) => c.slug === publishCategory)?.id || null,
           tags: [],
         }),
@@ -116,7 +124,11 @@ export default function AdminPending() {
 
   const handleReject = async (id: string) => {
     try {
-      await fetch(`/api/pending/${id}`, { method: 'DELETE' });
+      await fetch(`/api/pending/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reject' }),
+      });
       fetchArticles();
     } catch (error) {
       console.error('Reject error:', error);

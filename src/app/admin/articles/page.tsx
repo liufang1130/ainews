@@ -58,7 +58,12 @@ export default function AdminArticles() {
       const params = searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : '';
       const res = await fetch(`/api/articles?limit=50${params}`);
       const data = await res.json();
-      setArticles(data.articles || []);
+      // 兼容数组和对象两种返回格式
+      if (Array.isArray(data)) {
+        setArticles(data);
+      } else {
+        setArticles(data.articles || []);
+      }
     } catch (error) {
       console.error('Failed to fetch articles:', error);
     } finally {
